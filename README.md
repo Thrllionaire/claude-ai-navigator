@@ -2,6 +2,14 @@
 
 A panel on claude.ai conversation pages that lists every **Exchange** (your question plus Claude's answer) and jumps to it on click. Terms are defined in [GLOSSARY.md](./GLOSSARY.md).
 
+## Screenshots
+
+![Chat Navigator panel listing the exchanges of a conversation](docs/screenshots/panel.png)
+
+_Search, the current-exchange highlight and light/dark themes:_
+
+![Search and theme](docs/screenshots/search.png)
+
 ## Installation
 
 1. Open Chrome and go to `chrome://extensions`
