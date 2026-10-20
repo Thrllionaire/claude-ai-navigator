@@ -157,7 +157,12 @@
       if (taken.some(t => t.contains(a))) continue;
       taken.push(a);
     }
-    let text = taken.map(a => stripAnswerLabel(textOf(a))).filter(Boolean).join('\n\n');
+    // Hidden accessibility copies of the reply (often just its first paragraph) sit beside the
+    // real one; drop any part whose text is already contained in a longer part.
+    const parts = taken.map(a => stripAnswerLabel(textOf(a))).filter(Boolean);
+    let text = parts
+      .filter((p, i) => !parts.some((o, j) => j !== i && (o.length > p.length || (o.length === p.length && j < i)) && o.includes(p)))
+      .join('\n\n');
 
     if (!text) {
       // No recognisable answer container: fall back to whatever text sits after the Question
