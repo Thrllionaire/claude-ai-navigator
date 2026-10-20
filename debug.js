@@ -45,6 +45,21 @@ window.__ccnDebug = function () {
       .map(el => el.getAttribute('data-message-author-role'))
   )];
 
+  // Shape of the first assistant message: tag, classes, testid, aria attributes and text start per node
+  const answerTree = [];
+  const firstAnswer = document.querySelector('[data-testid="assistant-message"], .font-claude-response');
+  if (firstAnswer) {
+    const walk = (el, depth) => {
+      if (depth > 4 || answerTree.length > 60) return;
+      answerTree.push('  '.repeat(depth) + el.tagName.toLowerCase() +
+        (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).slice(0, 4).join('.') : '') +
+        ['data-testid', 'aria-live', 'aria-hidden', 'role'].map(a => el.hasAttribute(a) ? ` [${a}=${el.getAttribute(a)}]` : '').join('') +
+        ' "' + (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 50) + '"');
+      Array.from(el.children).forEach(c => walk(c, depth + 1));
+    };
+    walk(firstAnswer, 0);
+  }
+
   console.group('%c🗺️ Claude Chat Navigator — Debug Report', 'color:#7c6af7;font-weight:bold;font-size:13px');
   console.log('%cURL', 'font-weight:bold', location.href);
   console.log('%c✅ Known-selector hits', 'font-weight:bold', bySelectors.length ? bySelectors : '(none)');
@@ -53,9 +68,10 @@ window.__ccnDebug = function () {
   console.log('%c👤 data-role values', 'font-weight:bold', dataRoles);
   console.log('%c✍️  data-author values', 'font-weight:bold', dataAuthors);
   console.log('%c💬 data-message-author-role values', 'font-weight:bold', dataMessageRoles);
+  console.log('%c🧩 First answer structure', 'font-weight:bold', '\n' + (answerTree.join('\n') || '(none)'));
   console.groupEnd();
 
-  return { bySelectors, testIds, classBits, dataRoles, dataAuthors, dataMessageRoles };
+  return { bySelectors, testIds, classBits, dataRoles, dataAuthors, dataMessageRoles, answerTree };
 };
 
 console.log('%c[Claude Navigator] Debug ready — run window.__ccnDebug()', 'color:#7c6af7;font-style:italic');

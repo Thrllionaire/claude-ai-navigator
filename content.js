@@ -142,6 +142,20 @@
     return flat.length > PREVIEW_MAX ? flat.slice(0, PREVIEW_MAX) + '…' : flat;
   }
 
+  // Text of an Answer container without screen-reader-only copies, live regions and action buttons
+  // (claude.ai embeds a hidden "Claude responded: …" copy of the reply inside it).
+  const NOISE_SELECTOR = [
+    '.sr-only', '[aria-live]', '[role="status"]', '[aria-hidden="true"]',
+    '[data-testid="response-status-announcer"]', '[data-testid="message-actions"]', 'button',
+  ].join(', ');
+
+  function visibleText(el) {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll(NOISE_SELECTOR).forEach(n => n.remove());
+    clone.querySelectorAll('p, li, div, h1, h2, h3, h4, h5, h6, pre, tr, br').forEach(n => n.after(' '));
+    return clone.textContent.replace(/\s+/g, ' ').trim();
+  }
+
   // claude.ai prefixes each reply with hidden accessibility text ("Claude responded: ")
   function stripAnswerLabel(text) {
     return text.replace(/^\s*Claude responded:\s*/i, '');
@@ -161,7 +175,7 @@
     // real one; drop any part whose text is already contained in a longer part.
     // Compared with typographic quotes and spacing normalised: the hidden copy uses straight quotes.
     const norm = t => t.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/\s+/g, ' ').trim().toLowerCase();
-    const parts = taken.map(a => stripAnswerLabel(textOf(a))).filter(Boolean);
+    const parts = taken.map(a => stripAnswerLabel(visibleText(a))).filter(Boolean);
     const normed = parts.map(norm);
     let text = parts
       .filter((p, i) => !normed.some((o, j) => j !== i &&
