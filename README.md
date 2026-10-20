@@ -4,11 +4,13 @@ A panel on claude.ai conversation pages that lists every **Exchange** (your ques
 
 ## Screenshots
 
-![Chat Navigator panel listing the exchanges of a conversation](docs/screenshots/panel.png)
+The toggle button sits at the bottom-right of a conversation, with a badge showing how many exchanges it found:
 
-_Search, the current-exchange highlight and light/dark themes:_
+![Toggle button with exchange count on a claude.ai conversation](docs/screenshots/panel.jpg)
 
-![Search and theme](docs/screenshots/search.png)
+Open the panel to see each exchange, search across questions and answers, and jump to one:
+
+![Chat Navigator panel with a search filter applied](docs/screenshots/search.jpg)
 
 ## Installation
 
