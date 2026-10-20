@@ -142,6 +142,11 @@
     return flat.length > PREVIEW_MAX ? flat.slice(0, PREVIEW_MAX) + '…' : flat;
   }
 
+  // claude.ai prefixes each reply with hidden accessibility text ("Claude responded: ")
+  function stripAnswerLabel(text) {
+    return text.replace(/^\s*Claude responded:\s*/i, '');
+  }
+
   // Claude's visible reply between this Question and the next one (if that one is in the DOM)
   function answerFor(qEl, nextEl) {
     const taken = [];
@@ -152,7 +157,7 @@
       if (taken.some(t => t.contains(a))) continue;
       taken.push(a);
     }
-    let text = taken.map(textOf).filter(Boolean).join('\n\n');
+    let text = taken.map(a => stripAnswerLabel(textOf(a))).filter(Boolean).join('\n\n');
 
     if (!text) {
       // No recognisable answer container: fall back to whatever text sits after the Question
@@ -166,7 +171,7 @@
           if (sc === document.documentElement || !sc.lastChild) return '';
           range.setEndAfter(sc.lastChild);
         }
-        text = range.toString().trim();
+        text = stripAnswerLabel(range.toString().trim());
       } catch (_) { text = ''; }
     }
     return text.slice(0, 20000);
