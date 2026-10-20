@@ -8,9 +8,9 @@ The toggle button sits at the bottom-right of a conversation, with a badge showi
 
 ![Toggle button with exchange count on a claude.ai conversation](docs/screenshots/panel.jpg)
 
-Open the panel to see each exchange, search across questions and answers, and jump to one:
+Open the panel to see each exchange with a preview of the answer, search across questions and answers, and jump to one:
 
-![Chat Navigator panel with a search filter applied](docs/screenshots/search.jpg)
+![Chat Navigator panel listing an exchange with an answer preview](docs/screenshots/search.jpg)
 
 ## Installation
 
