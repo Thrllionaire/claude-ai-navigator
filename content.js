@@ -159,9 +159,13 @@
     }
     // Hidden accessibility copies of the reply (often just its first paragraph) sit beside the
     // real one; drop any part whose text is already contained in a longer part.
+    // Compared with typographic quotes and spacing normalised: the hidden copy uses straight quotes.
+    const norm = t => t.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/\s+/g, ' ').trim().toLowerCase();
     const parts = taken.map(a => stripAnswerLabel(textOf(a))).filter(Boolean);
+    const normed = parts.map(norm);
     let text = parts
-      .filter((p, i) => !parts.some((o, j) => j !== i && (o.length > p.length || (o.length === p.length && j < i)) && o.includes(p)))
+      .filter((p, i) => !normed.some((o, j) => j !== i &&
+        (o.length > normed[i].length || (o.length === normed[i].length && j < i)) && o.includes(normed[i])))
       .join('\n\n');
 
     if (!text) {
