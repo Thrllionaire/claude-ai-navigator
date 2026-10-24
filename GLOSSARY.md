@@ -29,8 +29,16 @@ Clicking an Item to move the view to its Exchange, with the Question aligned to 
 _Avoid_: Scroll-to, navigate
 
 **Scan**:
-The background pass that scrolls through the whole conversation to collect every Exchange, because claude.ai removes off-screen messages from the page.
+The pass that scrolls through the whole conversation to collect every Exchange from the page, because claude.ai removes off-screen messages from it. One way a Source can work, and the slowest.
 _Avoid_: Refresh, crawl, load
+
+**Source**:
+A pluggable way of producing the ordered list of Exchanges (text only, no screen positions). Sources are tried in a fixed order and the first that succeeds supplies the list; it may deliver results in batches.
+_Avoid_: Provider, strategy, loader
+
+**Locator**:
+The part that finds an Exchange in the page and scrolls to it for a Jump, whichever Source supplied the list.
+_Avoid_: Resolver, navigator
 
 **Current Exchange**:
 The Exchange the reader is currently looking at, highlighted in the Panel as they scroll.
